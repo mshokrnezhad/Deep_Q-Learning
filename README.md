@@ -10,6 +10,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 
 - [Q-Learning Basics](#q-learning-basics)
 - [Q-Learning with GYM](#q-learning-with-gym)
+- [DQN with GYM](#dqn-with-gym)
 
 ## Q-Learning Basics
 
@@ -101,6 +102,64 @@ The implementation consists of two main files:
   - Win percentage visualization using matplotlib
 
 The agent's performance is monitored by plotting the win percentage over time, providing insights into the learning progress and convergence of the Q-values. The implementation demonstrates how Q-Learning can effectively learn optimal policies in simple environments with discrete state and action spaces.
+
+---
+
+## [DQN with GYM](#dqn-with-gym)
+
+This implementation applies Deep Q-Networks (DQN) to the CartPole-v1 environment from OpenAI's Gym. Unlike tabular Q-learning, DQN leverages a neural network to approximate the Q-value function, enabling the agent to handle environments with continuous or high-dimensional state spaces. The agent learns to balance a pole on a cart by mapping observed states to action values using a simple feedforward neural network.
+
+### Algorithm
+
+The DQN algorithm for this implementation follows these steps:
+
+---
+
+1.  Initialize the neural network Q-function with random weights.
+2.  For each episode:
+    a. Reset the environment to initial state $s_0$.
+    b. For each time step until the episode ends:
+
+    i. Select action $a_t$ using $\epsilon$-greedy policy:
+
+    - With probability $\epsilon$: choose random action
+    - With probability $1-\epsilon$: choose action with highest Q-value from the network
+
+    ii. Execute action $a_t$, observe reward $r_t$ and next state $s_{t+1}$
+
+    iii. Update Q-network by minimizing the loss: $Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]$
+
+    iv. Update state: $s_t \leftarrow s_{t+1}$
+
+    v. Decrease exploration rate $\epsilon$
+
+---
+
+### Implementation Details
+
+The implementation consists of the following files:
+
+- [DQN.py](DQN%20with%20GYM/DQN.py): Contains the `Agent` class and the `LinearDQN` neural network. The agent uses a two-layer feedforward network (128 hidden units) and the Adam optimizer. Key hyperparameters:
+
+  - Learning rate (α): 0.0001
+  - Discount factor (γ): 0.99
+  - Epsilon decay: 1e-5
+  - Initial epsilon: 1.0
+  - Minimum epsilon: 0.01
+
+- [main.py](DQN%20with%20GYM/main.py): Sets up the CartPole-v1 environment and the training loop for 101 episodes. Tracks scores and epsilon history, printing average scores every 100 episodes.
+
+- [utils.py](DQN%20with%20GYM/utils.py): Provides a utility to plot both the running average score and epsilon over training steps.
+
+The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and exploration-exploitation tradeoff. This implementation demonstrates how DQN can solve environments with continuous state spaces where tabular methods are infeasible.
+
+### Outcomes
+
+The average scores (total rewards accumulated) of the CartPole agent over 101 training episodes:
+
+<div align="center">
+  <img src="DQN with GYM/CartePole_DQN.png" alt="CartPole DQN Training Curve" width="400"/>
+</div>
 
 ---
 
