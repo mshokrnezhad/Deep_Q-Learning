@@ -25,8 +25,11 @@ The Q-Learning algorithm involves the following components:
 
    - The Q-values are typically stored in a table (for discrete state-action spaces) or approximated using function approximators like neural networks (for continuous or large state spaces).
    - The optimal Q-value function satisfies the Bellman optimality equation:
-
-   $$Q^\star(s,a) = \mathbb{E}[R_t + \gamma \max_{a'} Q^\star(S_{t+1}, a') | S_t = s, A_t = a]$$
+     $$
+     \begin{eqnarray}
+     Q^\star(s,a) = \mathbb{E}[R_t + \gamma \max_{a'} Q^\star(S_{t+1}, a') | S_t = s, A_t = a]
+     \end{eqnarray}
+     $$
 
 2. **Learning Process**:
 
