@@ -63,7 +63,7 @@ The Q-Learning algorithm for this implementation follows these steps:
 
    b. For each time step until the episode ends:
 
-   i. Select action $a_t$ using ε-greedy policy: - With probability ε: choose random action - With probability 1-ε: choose action with highest Q-value
+   i. Select action $a_t$ using $\epsilon$-greedy policy: - With probability $\epsilon$: choose random action - With probability $1-\epsilon$: choose action with highest Q-value
 
    ii. Execute action $a_t$, observe reward $r_t$ and next state $s_{t+1}$
 
@@ -72,7 +72,7 @@ The Q-Learning algorithm for this implementation follows these steps:
 
    iv. Update state: $s_t \leftarrow s_{t+1}$
 
-   v. Decrease exploration rate ε
+   v. Decrease exploration rate $\epsilon$
 
 ---
 
