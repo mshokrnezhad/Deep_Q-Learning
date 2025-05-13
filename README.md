@@ -13,6 +13,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 - [DQN with GYM](#dqn-with-gym)
 - [Human-level DRL](#human-level-drl)
 - [DDQN-based RL](#ddqn-based-rl)
+- [D3QN](#d3qn)
 
 ## Q-Learning Basics
 
@@ -311,6 +312,83 @@ The agent's performance is visualized by plotting the running average score and 
 </div>
 
 This implementation demonstrates how Double DQN further improves the stability and accuracy of deep reinforcement learning in complex, high-dimensional environments, compared to standard DQN.
+
+## [D3QN](#d3qn)
+
+This approach implements a D3QN (Dueling Double Deep Q-Network) agent for the Atari game "PongNoFrameskip-v4" from the OpenAI Gym library. Building on the previous Double DQN approach, this implementation incorporates the Dueling Network Architecture as described in the paper [Dueling Network Architectures for Deep Reinforcement Learning](https://arxiv.org/abs/1511.06581). The key innovation is the use of two separate estimators within the neural network: one for the state value function and one for the state-dependent action advantage function. This factoring allows the agent to generalize learning across actions, improving learning efficiency and stability, especially in environments where the choice of action has little effect in many states.
+
+**Key improvements over previous approaches:**
+
+- **Dueling Network Architecture:** The neural network is split into two streams after the convolutional layers: one estimates the state value function $V(s)$, and the other estimates the advantage function $A(s, a)$. The final Q-value is computed as $Q(s, a) = V(s) + (A(s, a) - \frac{1}{|\mathcal{A}|} \sum_{a'} A(s, a'))$.
+- **Better Generalization:** By separating value and advantage, the agent can more efficiently learn which states are (or are not) valuable, even when the best action is not clear.
+- **All previous improvements:** The agent retains Double Q-Learning, experience replay, target network, and CNN-based feature extraction from previous approaches.
+
+These enhancements allow the agent to further improve stability and performance, particularly in environments with many similar-valued actions.
+
+### Algorithm
+
+The D3QN algorithm for this implementation follows these steps:
+
+---
+
+1.  Initialize the main D3QN and the target D3QN with random weights.
+2.  For each episode:
+    a. Reset the environment to initial state $s_0$.
+    b. For each time step until the episode ends:
+
+    i. Select action $a_t$ using $\epsilon$-greedy policy:
+
+    - With probability $\epsilon$: choose random action
+    - With probability $1-\epsilon$: choose action with highest advantage from the main network
+
+    ii. Execute action $a_t$, observe reward $r_t$, next state $s_{t+1}$, and done flag.
+
+    iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
+
+    iv. Sample a random minibatch from the replay buffer.
+
+    v. Compute target Q-values using D3QN: $Q_{\text{target}} = r_t + \gamma Q_{\text{target}}(s_{t+1}, \arg\max_a Q_{\text{main}}(s_{t+1}, a))$
+
+    vi. Update the main D3QN by minimizing the loss between predicted and target Q-values.
+
+    vii. Every fixed number of steps, update the target network weights to match the main network.
+
+    viii. Decrease exploration rate $\epsilon$.
+
+---
+
+### Implementation Details
+
+The implementation consists of the following files:
+
+- [agent.py](D3QN/agent.py): Contains the `Agent` class, which manages the main and target D3QN networks, experience replay, action selection, and learning using D3QN logic.
+- [deep_q_network.py](D3QN/deep_q_network.py): Defines the `DeepQNetwork` class, a dueling convolutional neural network for processing Atari frames and estimating both value and advantage streams.
+- [replay_memory.py](D3QN/replay_memory.py): Implements the experience replay buffer.
+- [main.py](D3QN/main.py): Sets up the PongNoFrameskip-v4 environment, runs the training loop for 300 episodes, and saves the best-performing model.
+- [utils.py](D3QN/utils.py): Provides utilities for environment preprocessing and plotting learning curves.
+
+Key hyperparameters:
+
+- Learning rate (α): 0.0001
+- Discount factor (γ): 0.99
+- Epsilon decay: 1e-5
+- Initial epsilon: 1.0
+- Minimum epsilon: 0.1
+- Replay buffer size: 50,000
+- Batch size: 32
+- Target network update frequency: 1,000 steps
+
+### Outcomes
+
+The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and the exploration-exploitation tradeoff. The average scores (total rewards accumulated) of the agent on PongNoFrameskip-v4 over 300 training episodes are shown below:
+
+<div align="center">
+  <img src="D3QN/plots/DuelingDQNAgent_PongNoFrameskip-v4_lr0.0001_300games.png" alt="D3QN Pong Training Curve" width="400"/>
+</div>
+
+This implementation demonstrates how the dueling network architecture further improves the efficiency and stability of deep reinforcement learning in complex, high-dimensional environments, compared to standard Double DQN.
+
+---
 
 ## Thank You <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands.png" alt="Folded Hands" width="20" height="20" />
 
