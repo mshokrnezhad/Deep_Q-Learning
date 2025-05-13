@@ -13,7 +13,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 
 ## Q-Learning Basics
 
-Q-Learning is a fundamental reinforcement learning algorithm that enables agents to learn optimal actions through interaction with an environment. It belongs to the class of temporal difference (TD) learning methods and is model-free, meaning it doesn't require knowledge of the environment's dynamics. Here are the key concepts:
+Q-Learning is a fundamental Reinforcement Learning (RL) algorithm that enables agents to learn optimal actions through interaction with an environment. It belongs to the class of temporal difference (TD) learning methods and is model-free, meaning it doesn't require knowledge of the environment's dynamics. Here are the key concepts:
 
 - **Q-Value**: The Q-value, denoted as $Q(s,a)$, represents the expected cumulative reward of taking action $a$ in state $s$ and following the optimal policy thereafter.
 
@@ -98,3 +98,9 @@ The implementation consists of two main files:
   - Win percentage visualization using matplotlib
 
 The agent's performance is monitored by plotting the win percentage over time, providing insights into the learning progress and convergence of the Q-values. The implementation demonstrates how Q-Learning can effectively learn optimal policies in simple environments with discrete state and action spaces.
+
+---
+
+## Thank You <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands.png" alt="Folded Hands" width="20" height="20" />
+
+Thank you for exploring Q-Learning with me! I hope you find this repository helpful and inspiring as you dive into the world of RL with discrete environments. Feel free to fork the repo and make contributions. I will review them as soon as possible and your contributions will be merged into the main repo.
