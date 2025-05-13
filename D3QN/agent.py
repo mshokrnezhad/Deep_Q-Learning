@@ -6,14 +6,14 @@ from replay_memory import ReplayBuffer
 
 class Agent(object):
     def __init__(self, gamma, epsilon, lr, n_actions, input_dims,  mem_size, batch_size, eps_min=0.01, eps_dec=5e-7,
-                  replace=1000, algo=None, env_name=None, checkpoint_dir='tmp/dqn'):
+                 replace=1000, algo=None, env_name=None, checkpoint_dir='tmp/dqn'):
         self.gamma = gamma
         self.epsilon = epsilon
         self.lr = lr
         self.n_actions = n_actions
         self.input_dims = input_dims
         self.batch_size = batch_size
-        self.eps_min = eps_min       
+        self.eps_min = eps_min
         self.eps_dec = eps_dec
         self.replace_target_counter = replace
         self.algo = algo
@@ -61,7 +61,7 @@ class Agent(object):
 
     def replace_target_network(self):
         if self.replace_target_counter is not None and \
-            self.learn_step_counter % self.replace_target_counter == 0:
+                self.learn_step_counter % self.replace_target_counter == 0:
             self.q_next.load_state_dict(self.q_eval.state_dict())
 
     def decrement_epsilon(self):
@@ -81,10 +81,6 @@ class Agent(object):
         states, actions, rewards, resulted_states, dones = self.sample_memory()
 
         indexes = np.arange(self.batch_size)
-
-
-
-
 
         V_states, A_states = self.q_eval.forward(states)
         q_pred = T.add(V_states, (A_states - A_states.mean(dim=1, keepdim=True)))[indexes, actions]

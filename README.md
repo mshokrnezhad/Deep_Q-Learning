@@ -14,6 +14,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 - [Human-level DRL](#human-level-drl)
 - [DDQN-based RL](#ddqn-based-rl)
 - [D3QN](#d3qn)
+- [DNN-based DDQL for VFP](#dnn-based-ddql-for-vfp)
 
 ## Q-Learning Basics
 
@@ -387,6 +388,71 @@ The agent's performance is visualized by plotting the running average score and 
 </div>
 
 This implementation demonstrates how the dueling network architecture further improves the efficiency and stability of deep reinforcement learning in complex, high-dimensional environments, compared to standard Double DQN.
+
+## [DNN-based DDQL for VFP](#dnn-based-ddql-for-vfp)
+
+This approach demonstrates the application of Double Deep Q-Learning (DDQL) with a deep neural network (DNN) to the Virtual Function Placement (VFP) problem in networked systems. Unlike previous approaches that focus on classic RL benchmarks, this example shows how DDQN can be used to solve a real-world resource allocation problem: deciding how to place virtual functions (VFs) of user-requested services onto a network of computing nodes.
+
+**Key aspects and improvements:**
+
+- **Application to VFP:** This is an example of using DDQN for VFP, where the agent learns to assign service functions to computing nodes in a way that optimizes network performance and resource utilization.
+- **Linear DNN Architecture:** The Q-networks are implemented as deep, fully connected neural networks (rather than convolutional networks), suitable for the structured, non-visual state space of VFP.
+- **General DDQN Improvements:** The agent uses two networks (main and target) to reduce overestimation bias, experience replay for stable learning, and an epsilon-greedy policy for exploration.
+- **Custom Environment:** The environment models a network of computing nodes and service requests, and is based on [ReNet](https://github.com/mshokrnezhad/ReNet), as described in the paper: [Double Deep Q-Learning-Based Path Selection and Service Placement for Latency-Sensitive Beyond 5G Applications](https://ieeexplore.ieee.org/abstract/document/10207694/).
+
+This approach demonstrates the flexibility of DDQN for complex, real-world decision-making tasks beyond games.
+
+### Algorithm
+
+The DNN-based DDQL for VFP algorithm follows these steps:
+
+---
+
+1.  Initialize the main Q-network and the target Q-network with random weights.
+2.  For each episode (service placement scenario):
+    a. Reset the environment and obtain the initial state.
+    b. For each service request:
+
+    i. Select a computing node for the virtual function using $\epsilon$-greedy policy:
+
+    - With probability $\epsilon$: choose a random node
+    - With probability $1-\epsilon$: choose the node with the highest Q-value from the main network
+
+    ii. Execute the placement, observe the reward, next state, and done flag.
+
+    iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
+
+    iv. Sample a random minibatch from the replay buffer.
+
+    v. Compute target Q-values using DDQN: $Q_{\text{target}} = r_t + \gamma Q_{\text{target}}(s_{t+1}, \arg\max_a Q_{\text{main}}(s_{t+1}, a))$
+
+    vi. Update the main Q-network by minimizing the loss between predicted and target Q-values.
+
+    vii. Every fixed number of steps, update the target network weights to match the main network.
+
+    viii. Decrease exploration rate $\epsilon$.
+
+---
+
+### Implementation Details
+
+The implementation consists of the following files:
+
+- [Agent.py](DNN-based%20DDQL%20for%20VFP/Agent.py): Contains the `Agent` class, which manages the main and target Q-networks, experience replay, action selection, and learning using DDQN logic.
+- [DNN.py](DNN-based%20DDQL%20for%20VFP/DNN.py): Defines the `DNN` class, a deep fully connected neural network for Q-value approximation.
+- [Memory.py](DNN-based%20DDQL%20for%20VFP/Memory.py): Implements the experience replay buffer.
+- [Environment.py](DNN-based%20DDQL%20for%20VFP/Environment.py): Models the network of computing nodes, service requests, and placement logic.
+- [main.py](DNN-based%20DDQL%20for%20VFP/main.py): Sets up the VFP environment, runs the training loop, and tracks performance metrics.
+- [config.py](DNN-based%20DDQL%20for%20VFP/config.py): Contains configuration parameters for the agent and environment.
+- [Functions.py](DNN-based%20DDQL%20for%20VFP/Functions.py): Utility functions for state parsing, file I/O, etc.
+
+Key hyperparameters:
+
+- Learning rate (α): configurable in `config.py`
+- Discount factor (γ): configurable in `config.py`
+- Epsilon decay, initial epsilon, minimum epsilon: configurable in `config.py`
+- Replay buffer size, batch size, target network update frequency: configurable in `config.py`
+- DNN architecture: 4 hidden layers (256, 128, 64, 32 units)
 
 ---
 
