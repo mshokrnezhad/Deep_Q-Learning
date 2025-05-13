@@ -319,7 +319,7 @@ This approach implements a D3QN (Dueling Double Deep Q-Network) agent for the At
 
 **Key improvements over previous approaches:**
 
-- **Dueling Network Architecture:** The neural network is split into two streams after the convolutional layers: one estimates the state value function $V(s)$, and the other estimates the advantage function $A(s, a)$. The final Q-value is computed as $Q(s, a) = V(s) + (A(s, a) - \frac{1}{|\mathcal{A}|} \sum_{a'} A(s, a'))$.
+- **Dueling Network Architecture:** The neural network is split into two streams after the convolutional layers: one estimates the state value function $V(s)$, and the other estimates the advantage function $A(s, a)$. The final Q-value is computed as $Q(s, a) = V(s) + (A(s, a) - 1/|\mathcal{A}| \cdot \sum_{a'} A(s, a'))$.
 - **Better Generalization:** By separating value and advantage, the agent can more efficiently learn which states are (or are not) valuable, even when the best action is not clear.
 - **All previous improvements:** The agent retains Double Q-Learning, experience replay, target network, and CNN-based feature extraction from previous approaches.
 
