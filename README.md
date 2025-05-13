@@ -12,6 +12,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 - [Q-Learning with GYM](#q-learning-with-gym)
 - [DQN with GYM](#dqn-with-gym)
 - [Human-level DRL](#human-level-drl)
+- [DDQN-based RL](#ddqn-based-rl)
 
 ## Q-Learning Basics
 
@@ -235,6 +236,81 @@ The agent's performance is visualized by plotting the running average score and 
 </div>
 
 This implementation demonstrates how deep reinforcement learning can achieve human-level control in complex, high-dimensional environments, surpassing the capabilities of previous tabular and simple DQN agents.
+
+## [DDQN-based RL](#ddqn-based-rl)
+
+This approach implements a Double Deep Q-Network (DDQN) agent for the Atari game "PongNoFrameskip-v4" from the OpenAI Gym library. Building on the previous human-level DQN approach, this implementation incorporates the Double Q-Learning technique as described in the paper [Deep Reinforcement Learning with Double Q-Learning](https://arxiv.org/abs/1509.06461). The key improvement is the use of two deep neural networks: one to select the best action and another to evaluate the expected value of that action, which helps to reduce overestimation bias present in standard DQN.
+
+**Key improvements over previous approaches:**
+
+- **Double Q-Learning:** Instead of using a single network to both select and evaluate actions, DDQN decouples these roles. The main network selects the action, while the target network evaluates its value, leading to more accurate and stable learning.
+- **CNN-based Feature Extraction:** Like the previous approach, the agent uses a deep convolutional neural network to process raw pixel frames, enabling learning directly from high-dimensional visual input.
+- **Experience Replay & Target Network:** The agent uses a replay buffer for sampling random minibatches and a target network for stable Q-value estimation, as in the original DQN.
+
+These enhancements allow the agent to further improve stability and performance in complex environments, addressing the overestimation problem of standard DQN.
+
+### Algorithm
+
+The DDQN-based RL (Double DQN) algorithm for this implementation follows these steps:
+
+---
+
+1.  Initialize the main Q-network and the target Q-network with random weights.
+2.  For each episode:
+    a. Reset the environment to initial state $s_0$.
+    b. For each time step until the episode ends:
+
+    i. Select action $a_t$ using $\epsilon$-greedy policy:
+
+    - With probability $\epsilon$: choose random action
+    - With probability $1-\epsilon$: choose action with highest Q-value from the main network
+
+    ii. Execute action $a_t$, observe reward $r_t$, next state $s_{t+1}$, and done flag.
+
+    iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
+
+    iv. Sample a random minibatch from the replay buffer.
+
+    v. Compute target Q-values using Double DQN: $Q_{\text{target}} = r_t + \gamma Q_{\text{target}}(s_{t+1}, \arg\max_a Q_{\text{main}}(s_{t+1}, a))$
+
+    vi. Update the main Q-network by minimizing the loss between predicted and target Q-values.
+
+    vii. Every fixed number of steps, update the target network weights to match the main network.
+
+    viii. Decrease exploration rate $\epsilon$.
+
+---
+
+### Implementation Details
+
+The implementation consists of the following files:
+
+- [agent.py](DDQN-based%20RL/agent.py): Contains the `Agent` class, which manages the main and target networks, experience replay, action selection, and learning using Double DQN logic.
+- [deep_q_network.py](DDQN-based%20RL/deep_q_network.py): Defines the `DeepQNetwork` class, a deep convolutional neural network for processing Atari frames.
+- [replay_memory.py](DDQN-based%20RL/replay_memory.py): Implements the experience replay buffer.
+- [main.py](DDQN-based%20RL/main.py): Sets up the PongNoFrameskip-v4 environment, runs the training loop for 500 episodes, and saves the best-performing model.
+- [utils.py](DDQN-based%20RL/utils.py): Provides utilities for environment preprocessing and plotting learning curves.
+
+Key hyperparameters:
+
+- Learning rate (α): 0.0001
+- Discount factor (γ): 0.99
+- Epsilon decay: 1e-5
+- Initial epsilon: 1.0
+- Minimum epsilon: 0.1
+- Replay buffer size: 50,000
+- Batch size: 32
+- Target network update frequency: 10,000 steps
+
+### Outcomes
+
+The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and the exploration-exploitation tradeoff. The average scores (total rewards accumulated) of the agent on PongNoFrameskip-v4 over 500 training episodes are shown below:
+
+<div align="center">
+  <img src="DDQN-based RL/plots/DDQNAgent_PongNoFrameskip-v4_lr0.0001_500games.png" alt="DDQN Pong Training Curve" width="400"/>
+</div>
+
+This implementation demonstrates how Double DQN further improves the stability and accuracy of deep reinforcement learning in complex, high-dimensional environments, compared to standard DQN.
 
 ## Thank You <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands.png" alt="Folded Hands" width="20" height="20" />
 
