@@ -11,6 +11,7 @@ This repository demonstrates different implementations of Q-learning algorithms 
 - [Q-Learning Basics](#q-learning-basics)
 - [Q-Learning with GYM](#q-learning-with-gym)
 - [DQN with GYM](#dqn-with-gym)
+- [Human-level DRL](#human-level-drl)
 
 ## Q-Learning Basics
 
@@ -151,17 +152,83 @@ The implementation consists of the following files:
 
 - [utils.py](DQN%20with%20GYM/utils.py): Provides a utility to plot both the running average score and epsilon over training steps.
 
-The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and exploration-exploitation tradeoff. This implementation demonstrates how DQN can solve environments with continuous state spaces where tabular methods are infeasible.
-
 ### Outcomes
 
-The average scores (total rewards accumulated) of the CartPole agent over 101 training episodes:
+The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and the exploration-exploitation tradeoff. The average scores (total rewards accumulated) of the CartPole agent over 101 training episodes are shown below:
 
 <div align="center">
   <img src="DQN with GYM/CartePole_DQN.png" alt="CartPole DQN Training Curve" width="400"/>
 </div>
 
+This implementation demonstrates how DQN can solve environments with continuous state spaces where tabular methods are infeasible.
+
+## [Human-level DRL](#human-level-drl)
+
+This approach implements a Deep Q-Network (DQN) agent that achieves human-level performance on the Atari game "PongNoFrameskip-v4" from the OpenAI Gym library. Building on the previous DQN approach, this implementation introduces several key improvements inspired by the landmark paper [Human-level control through deep reinforcement learning (Mnih et al., 2015)](https://www.nature.com/articles/nature14236):
+
+- **Convolutional Neural Network (CNN) Architecture**: Instead of a simple feedforward network, the agent uses a deep CNN to process raw pixel frames, enabling it to extract spatial and temporal features from high-dimensional visual input.
+- **Experience Replay**: The agent stores past experiences in a replay buffer and samples random minibatches for training, breaking correlations between consecutive samples and improving data efficiency and stability.
+- **Target Network**: A separate target network is used to compute target Q-values, which is updated less frequently than the main network. This helps stabilize training by reducing oscillations and divergence.
+- **Atari Preprocessing**: The environment is wrapped to preprocess frames (e.g., resizing, grayscaling, stacking), as described in the original DQN paper.
+
+These enhancements allow the agent to learn directly from high-dimensional sensory input and outperform previous tabular and simple DQN approaches, which are limited to low-dimensional or engineered state spaces.
+
+### Algorithm
+
+The Human-level DRL algorithm for this implementation follows these steps:
+
 ---
+
+1.  Initialize the main Q-network and the target Q-network with random weights.
+2.  For each episode:
+    a. Reset the environment to initial state $s_0$.
+    b. For each time step until the episode ends:
+    i. Select action $a_t$ using $\epsilon$-greedy policy:
+    - With probability $\epsilon$: choose random action
+    - With probability $1-\epsilon$: choose action with highest Q-value from the main network  
+       ii. Execute action $a_t$, observe reward $r_t$, next state $s_{t+1}$, and done flag.
+      iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
+      iv. Sample a random minibatch from the replay buffer.
+      v. Compute target Q-values using the target network:
+      $$
+      Q_{\text{target}} = r_t + \gamma \max_a Q_{\text{target}}(s_{t+1}, a)
+      $$
+              vi. Update the main Q-network by minimizing the loss between predicted and target Q-values.
+              vii. Every fixed number of steps, update the target network weights to match the main network.
+              viii. Decrease exploration rate $\epsilon$.
+
+---
+
+### Implementation Details
+
+The implementation consists of the following files:
+
+- [agent.py](Human-level%20DRL/agent.py): Contains the `Agent` class, which manages the main and target networks, experience replay, action selection, and learning.
+- [DQN.py](Human-level%20DRL/DQN.py): Defines the `DeepQNetwork` class, a deep convolutional neural network for processing Atari frames.
+- [replay_memory.py](Human-level%20DRL/replay_memory.py): Implements the experience replay buffer.
+- [main.py](Human-level%20DRL/main.py): Sets up the PongNoFrameskip-v4 environment, runs the training loop for 500 episodes, and saves the best-performing model.
+- [utils.py](Human-level%20DRL/utils.py): Provides utilities for environment preprocessing and plotting learning curves.
+
+Key hyperparameters:
+
+- Learning rate (α): 0.0001
+- Discount factor (γ): 0.99
+- Epsilon decay: 1e-5
+- Initial epsilon: 1.0
+- Minimum epsilon: 0.1
+- Replay buffer size: 50,000
+- Batch size: 32
+- Target network update frequency: 1,000 steps
+
+### Outcomes
+
+The agent's performance is visualized by plotting the running average score and epsilon, providing insight into learning progress and the exploration-exploitation tradeoff. The average scores (total rewards accumulated) of the agent on PongNoFrameskip-v4 over 500 training episodes are shown below:
+
+<div align="center">
+  <img src="Human-level DRL/plots/DQNAgent_PongNoFrameskip-v4_lr0.0001_500games.png" alt="DQN Pong Training Curve" width="400"/>
+</div>
+
+This implementation demonstrates how deep reinforcement learning can achieve human-level control in complex, high-dimensional environments, surpassing the capabilities of previous tabular and simple DQN agents.
 
 ## Thank You <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands.png" alt="Folded Hands" width="20" height="20" />
 
