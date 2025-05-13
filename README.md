@@ -8,7 +8,7 @@ Q-Learning is a fundamental reinforcement learning algorithm that enables agents
 
 - **Q-Value**: The Q-value, denoted as $Q(s,a)$, represents the expected cumulative reward of taking action $a$ in state $s$ and following the optimal policy thereafter.
 
-- **Objective**: The goal is to learn the optimal action-value function $Q^*(s,a)$ that maximizes the expected return for each state-action pair.
+- **Objective**: The goal is to learn the optimal action-value function $Q^\star(s,a)$ that maximizes the expected return for each state-action pair.
 
 The Q-Learning algorithm involves the following components:
 
@@ -17,7 +17,7 @@ The Q-Learning algorithm involves the following components:
    - The Q-values are typically stored in a table (for discrete state-action spaces) or approximated using function approximators like neural networks (for continuous or large state spaces).
    - The optimal Q-value function satisfies the Bellman optimality equation:
 
-   $$Q^*(s,a) = \mathbb{E}[R_t + \gamma \max_{a'} Q^*(S_{t+1}, a') | S_t = s, A_t = a]$$
+   $$Q^\star(s,a) = \mathbb{E}[R_t + \gamma \max_{a'} Q^\star(S_{t+1}, a') | S_t = s, A_t = a]$$
 
 2. **Learning Process**:
 
@@ -75,6 +75,8 @@ The Q-Learning algorithm for this implementation follows these steps:
    v. Decrease exploration rate ε
 
 ---
+
+### Implementation Details
 
 The implementation consists of two main files:
 
