@@ -183,19 +183,25 @@ The Human-level DRL algorithm for this implementation follows these steps:
 2.  For each episode:
     a. Reset the environment to initial state $s_0$.
     b. For each time step until the episode ends:
+
     i. Select action $a_t$ using $\epsilon$-greedy policy:
+
     - With probability $\epsilon$: choose random action
-    - With probability $1-\epsilon$: choose action with highest Q-value from the main network  
-       ii. Execute action $a_t$, observe reward $r_t$, next state $s_{t+1}$, and done flag.
-      iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
-      iv. Sample a random minibatch from the replay buffer.
-      v. Compute target Q-values using the target network:
-      $$
-      Q_{\text{target}} = r_t + \gamma \max_a Q_{\text{target}}(s_{t+1}, a)
-      $$
-              vi. Update the main Q-network by minimizing the loss between predicted and target Q-values.
-              vii. Every fixed number of steps, update the target network weights to match the main network.
-              viii. Decrease exploration rate $\epsilon$.
+    - With probability $1-\epsilon$: choose action with highest Q-value from the main network
+
+    ii. Execute action $a_t$, observe reward $r_t$, next state $s_{t+1}$, and done flag.
+
+    iii. Store $(s_t, a_t, r_t, s_{t+1}, \text{done})$ in the replay buffer.
+
+    iv. Sample a random minibatch from the replay buffer.
+
+    v. Compute target Q-values using the target network: $Q_{\text{target}} = r_t + \gamma \max_a Q_{\text{target}}(s_{t+1}, a)$
+
+    vi. Update the main Q-network by minimizing the loss between predicted and target Q-values.
+
+    vii. Every fixed number of steps, update the target network weights to match the main network.
+
+    viii. Decrease exploration rate $\epsilon$.
 
 ---
 
