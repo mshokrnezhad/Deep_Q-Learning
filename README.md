@@ -1,6 +1,15 @@
 # Deep_Q-Learning
 
-Implementation of Deep Q-Learning Techniques
+<div align="center">
+  <img src="dql.png" alt="drawing" width="600"/>
+</div>
+
+This repository demonstrates different implementations of Q-learning algorithms from basic to advanced deep learning architectures.
+
+## Table of contents
+
+- [Q-Learning Basics](#q-learning-basics)
+- [Q-Learning with GYM](#q-learning-with-gym)
 
 ## Q-Learning Basics
 
@@ -35,7 +44,7 @@ The Q-Learning algorithm involves the following components:
 
 3. **Exploration vs Exploitation**:
 
-   - The agent balances exploration (trying new actions) and exploitation (choosing the best known actions) using strategies like $\epsion$-greedy:
+   - The agent balances exploration (trying new actions) and exploitation (choosing the best known actions) using strategies like $\epsilon$-greedy:
 
    $$\pi(s) = \text{random action with probability } \epsilon \text{, or } \arg\max_a Q(s,a) \text{ with probability } 1-\epsilon$$
 
