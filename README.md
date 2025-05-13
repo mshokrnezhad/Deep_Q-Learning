@@ -35,14 +35,9 @@ The Q-Learning algorithm involves the following components:
 
 3. **Exploration vs Exploitation**:
 
-   - The agent balances exploration (trying new actions) and exploitation (choosing the best known actions) using strategies like ε-greedy:
+   - The agent balances exploration (trying new actions) and exploitation (choosing the best known actions) using strategies like $\epsion$-greedy:
 
-   $$
-   \pi(s) = \begin{cases}
-   \text{random action} & \text{with probability } \epsilon \\
-   \arg\max_a Q(s,a) & \text{with probability } 1-\epsilon
-   \end{cases}
-   $$
+   $$\pi(s) = \text{random action with probability } \epsilon \text{, or } \arg\max_a Q(s,a) \text{ with probability } 1-\epsilon$$
 
 The following implementations demonstrate different approaches to Q-Learning, from basic tabular methods to more advanced deep Q-learning techniques.
 
@@ -56,23 +51,23 @@ The Q-Learning algorithm for this implementation follows these steps:
 
 ---
 
-1. Initialize Q-values for all state-action pairs to zero.
-2. For each episode:
+1.  Initialize Q-values for all state-action pairs to zero.
+2.  For each episode:
 
-   a. Reset the environment to initial state $s_0$.
+    a. Reset the environment to initial state $s_0$.
 
-   b. For each time step until the episode ends:
+    b. For each time step until the episode ends:
 
-   i. Select action $a_t$ using $\epsilon$-greedy policy: - With probability $\epsilon$: choose random action - With probability $1-\epsilon$: choose action with highest Q-value
+         i. Select action $a_t$ using $\epsilon$-greedy policy: - With probability $\epsilon$: choose random action - With probability $1-\epsilon$: choose action with highest Q-value
 
-   ii. Execute action $a_t$, observe reward $r_t$ and next state $s_{t+1}$
+         ii. Execute action $a_t$, observe reward $r_t$ and next state $s_{t+1}$
 
-   iii. Update Q-value using the update rule:
-   $$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]$$
+         iii. Update Q-value using the update rule:
+         $$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]$$
 
-   iv. Update state: $s_t \leftarrow s_{t+1}$
+         iv. Update state: $s_t \leftarrow s_{t+1}$
 
-   v. Decrease exploration rate $\epsilon$
+         v. Decrease exploration rate $\epsilon$
 
 ---
 
