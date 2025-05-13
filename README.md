@@ -75,11 +75,7 @@ The Q-Learning algorithm for this implementation follows these steps:
 
     ii. Execute action $a_t$, observe reward $r_t$ and next state $s_{t+1}$
 
-    iii. Update Q-value using the update rule:
-
-$$
-Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]
-$$
+    iii. Update Q-value using the update rule: $Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_a Q(s_{t+1}, a) - Q(s_t, a_t)]$
 
     iv. Update state: $s_t \leftarrow s_{t+1}$
 
