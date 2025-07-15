@@ -109,8 +109,6 @@ The implementation consists of two main files:
 
 The agent's performance is monitored by plotting the win percentage over time, providing insights into the learning progress and convergence of the Q-values. The implementation demonstrates how Q-Learning can effectively learn optimal policies in simple environments with discrete state and action spaces.
 
----
-
 ## [DQN with GYM](#dqn-with-gym)
 
 This implementation applies Deep Q-Networks (DQN) to the CartPole-v1 environment from OpenAI's Gym. Unlike tabular Q-learning, DQN leverages a neural network to approximate the Q-value function, enabling the agent to handle environments with continuous or high-dimensional state spaces. The agent learns to balance a pole on a cart by mapping observed states to action values using a simple feedforward neural network.
@@ -456,8 +454,6 @@ Key hyperparameters:
 - Replay buffer size, batch size, target network update frequency: configurable in `config.py`
 - DNN architecture: 4 hidden layers (256, 128, 64, 32 units)
 
----
-
 ## [GATConv-based DDQL for VFP](#gatconv-based-ddql-for-vfp)
 
 This approach demonstrates the application of DDQL with a Graph Attention Convolution (GATConv) neural network to the VFP problem in networked systems. Like the previous DNN-based approach, this method uses DDQN to decide how to place VFs of user-requested services onto a network of computing nodes, but replaces the fully connected DNN with a GATConv-based Graph Neural Network (GNN) to better capture the relationships between nodes.
@@ -524,8 +520,6 @@ Key hyperparameters:
 - Epsilon decay, initial epsilon, minimum epsilon: configurable in `config.py`
 - Replay buffer size, batch size, target network update frequency: configurable in `config.py`
 - GNN architecture: 2 GATConv layers + 1 linear layer
-
----
 
 ## [A3TGCN-based DDQL for VFP](#a3tgcn-based-ddql-for-vfp)
 
